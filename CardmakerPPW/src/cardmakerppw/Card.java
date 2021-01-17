@@ -342,7 +342,7 @@ public class Card implements java.io.Serializable {
             armor = 0;
         }
         
-        this.armor = 0;
+        this.armor = armor;
     }
     
     public void setCounter(int counter){
