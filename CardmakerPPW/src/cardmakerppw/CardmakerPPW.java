@@ -873,6 +873,7 @@ public class CardmakerPPW {
         
         if(c != null){
             card = c;
+            cardArt = c.getArt();//Added to solve glitch where art was erased??
         }
         
         drawFrame();
@@ -1015,7 +1016,9 @@ public class CardmakerPPW {
         }
         
         if(!card.getAbility().equals("") && !card.allSpaces(card.getAbility()) && card.getAbility() != null){
+            
             words = words + card.getAbility() + "\n\n";
+            
         }
         
         if(card.getType() == Type.FIGHTER){
