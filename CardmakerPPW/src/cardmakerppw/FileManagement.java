@@ -25,8 +25,14 @@ public class FileManagement {
     
     public static class FileManager{
         private static JFileChooser fc;
-    
+        private static boolean fileLock  = false;
+        
+        public static boolean getFileLock(){
+            return fileLock;
+        }
+        
         public static void SaveCard(Card c){
+            fileLock = true;
             if(fc == null){
                 fc = new JFileChooser();
                 fc.setCurrentDirectory(new File(System.getProperty("user.home")));
@@ -40,9 +46,11 @@ public class FileManagement {
             if(selection == JFileChooser.APPROVE_OPTION){
                 if(DeserializeCard() != null){
                     //File Exists Here, you wanna overwrite?
+                    
                     if(saveCheck() == 0){
                         //Don't Overwrite
                         JOptionPane.showMessageDialog(null, "Save Cancelled");
+                        fileLock = false;
                         return;
                     } 
                 }
@@ -52,9 +60,12 @@ public class FileManagement {
             } else if( selection == JFileChooser.CANCEL_OPTION){
                 JOptionPane.showMessageDialog(null, "Save Cancelled");
             }
+            
+            fileLock = false;
         }
 
         public static Card LoadCard(){
+            fileLock = true;
             if(fc == null){
                 fc = new JFileChooser();
                 fc.setCurrentDirectory(new File(System.getProperty("user.home")));
@@ -67,13 +78,16 @@ public class FileManagement {
             int selection = fc.showOpenDialog(fc);
 
             if(selection == JFileChooser.APPROVE_OPTION){
+                fileLock = false;
                 return DeserializeCard();
             } 
+            fileLock = false;
 
             return null;
         }
 
         public static ImageIcon LoadImage(){
+            fileLock = true;
             if(fc == null){
                 fc = new JFileChooser();
                 fc.setCurrentDirectory(new File(System.getProperty("user.home")));
@@ -97,6 +111,7 @@ public class FileManagement {
                         System.out.println(fc.getSelectedFile().getAbsolutePath());
                         //img = ImageIO.read(new File(file.getAbsolutePath()));
                         //Desktop.getDesktop().open(file);
+                        fileLock = false;
                         return img;
                     }
                 }catch (IOException e){
@@ -104,10 +119,12 @@ public class FileManagement {
                 }
             }
             JOptionPane.showMessageDialog(null, "Image not found");
+            fileLock = false;
             return null;
         }
         
         public static void ExportCardImage(BufferedImage bi){
+            fileLock = true;
             if(fc == null){
                 fc = new JFileChooser();
                 fc.setCurrentDirectory(new File(System.getProperty("user.home")));
@@ -140,6 +157,7 @@ public class FileManagement {
                         //Popup confirming overwrite
                         if(exportCheck() == 0){
                             JOptionPane.showMessageDialog(null, "Export Cancelled");
+                            fileLock = false;
                             return;
                         }
                     }
@@ -151,13 +169,16 @@ public class FileManagement {
                     // retrieve image
                     File outputfile = new File(path);
                     ImageIO.write(bi, "png", outputfile);
+                    
                 } catch (IOException e) {
 
                 }
+                fileLock = false;
             }
         }
 
         private static int saveCheck(){
+            
             String[] options = new String[]{"No", "Yes"};
 
             int choice = JOptionPane.showOptionDialog( null,

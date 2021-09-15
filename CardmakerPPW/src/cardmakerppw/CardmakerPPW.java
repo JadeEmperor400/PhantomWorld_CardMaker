@@ -126,6 +126,8 @@ public class CardmakerPPW {
     static JLabel cardPreview = new JLabel();
     static JPanel actPanel;
     
+    static boolean FileLock = false;
+    
     public static void main(String[] args) {
         // TODO code application logic here
         
@@ -164,7 +166,16 @@ public class CardmakerPPW {
             }
         }*/
         
-        
+        while(1 == 1){
+            
+            if(FileLock == false){
+                setCard();
+                
+            }
+            
+            cardPreview.setIcon(previewCard());
+            delay(250);
+        }
     } //End of main
     
     //Draws the GUI of the App
@@ -607,7 +618,7 @@ public class CardmakerPPW {
         buttonPan.setLayout(new FlowLayout());
         
         
-        preview = new JButton("Update Preview");
+        /*preview = new JButton("Update Preview");
         preview.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
                 setCard();
@@ -615,7 +626,7 @@ public class CardmakerPPW {
                 //drawFrame();
             }
         });
-        buttonPan.add(preview);
+        buttonPan.add(preview);*/
         
         artChange = new JButton("Change Art");
         artChange.addActionListener(new ActionListener(){
@@ -815,6 +826,10 @@ public class CardmakerPPW {
         isAttack2.isSelected()); 
         */
         
+        if(FileManager.getFileLock()){
+            return;
+        }
+        
         action1.setName(actName1.getText());
         action1.setCost(actCost1.getText());
         action1.setDamage((int)actDmg1.getValue());
@@ -864,30 +879,39 @@ public class CardmakerPPW {
     private static void setArt(){
         cardArt = FileManager.LoadImage();
         card.setArt(cardArt);
-        cardPreview.setIcon(previewCard());
         setCard();
+        cardPreview.setIcon(previewCard());
+        
     }
     
     private static void loadCard(){
+        FileLock = true;
+        
         Card c = FileManager.LoadCard();
         
         if(c != null){
             card = c;
             cardArt = c.getArt();//Added to solve glitch where art was erased??
+            
         }
         
         drawFrame();
+        
+        FileLock = false;
     }
     
     private static void saveCard(){
-        
+        FileLock = true;
         setCard();
         FileManager.SaveCard(card);
+        FileLock = false;
     }
     
     //Export card image
     private static void exportCard(){
+        FileLock = true;
         FileManager.ExportCardImage(buffImg);
+        FileLock = false;
     }
     
     //Draw text on image
@@ -1105,4 +1129,13 @@ public class CardmakerPPW {
         for (String line : text.split("\n"))
         g.drawString(line, x, y += g.getFontMetrics().getHeight());
     }//End draw String
+    
+    static void delay (int ms){
+        try{
+            Thread.sleep(ms);
+            
+        } catch (InterruptedException e){
+        
+        }
+    }
 }//End of Class
