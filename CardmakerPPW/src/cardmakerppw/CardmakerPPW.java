@@ -174,7 +174,7 @@ public class CardmakerPPW {
             }
             
             cardPreview.setIcon(previewCard());
-            delay(250);
+            delay(200);
         }
     } //End of main
     
@@ -649,7 +649,7 @@ public class CardmakerPPW {
         
         save = new JMenuItem("Save Card");
         load = new JMenuItem("Load Card");
-        export = new JMenuItem("(TODO)Export Card");
+        export = new JMenuItem("Export Card");
         
         save.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
@@ -734,28 +734,14 @@ public class CardmakerPPW {
         
         ImageIcon img = null;
         URL resource = CardmakerPPW.class.getClassLoader().getResource(path);
-        System.out.println(resource);
+        //System.out.println(resource);
         File file = new File(resource.getFile());
-        /*
-        try{
-            Desktop.getDesktop().open(file);
-        } catch(IOException e){
         
-        } catch (NullPointerException e){
-        
-        }*/
-        
-        //img = new ImageIcon(file.getAbsolutePath());
-        /*
-        JFrame t = new JFrame("Test");
-        t.add(new JLabel(img));
-        t.setVisible(true);
-        */ // TODO: This works but what is below fails??
         if(resource != null){
             try{
                     if(ImageIO.read(file) != null){
                         img = new ImageIcon(file.getAbsolutePath());
-                        System.out.println("Frame Found!! : " + file.getAbsolutePath());
+                        //System.out.println("Frame Found!! : " + file.getAbsolutePath());
                         return img;
                     }
                 }    
@@ -826,9 +812,6 @@ public class CardmakerPPW {
         isAttack2.isSelected()); 
         */
         
-        if(FileManager.getFileLock()){
-            return;
-        }
         
         action1.setName(actName1.getText());
         action1.setCost(actCost1.getText());
@@ -1057,7 +1040,7 @@ public class CardmakerPPW {
                 words = words + "\n";
                 
                 if(!action1.getCost().equals("") && !action1.allSpaces(action1.getCost()) && action1.getCost() != null){
-                    words = words + "[Act Cost][" + action1.getCost() + "]\n";
+                    words = words + "[Act Cost][" + action1.getCost() + "]";
                 }
                 
                 if(!action1.getEffect().equals("") && !action1.allSpaces(action1.getEffect()) && action1.getEffect() != null){
@@ -1077,7 +1060,7 @@ public class CardmakerPPW {
                 words = words + "\n";
                 
                 if(!action2.getCost().equals("") && !action2.allSpaces(action2.getCost()) && action2.getCost() != null){
-                    words = words + "[Act Cost][" + action2.getCost() + "]\n";
+                    words = words + "[Act Cost][" + action2.getCost() + "]";
                 }
                 
                 if(!action2.getEffect().equals("") && !action2.allSpaces(action2.getEffect()) && action2.getEffect() != null){

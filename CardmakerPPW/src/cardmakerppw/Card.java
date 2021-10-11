@@ -256,6 +256,7 @@ public class Card implements java.io.Serializable {
     
     public void setCondition(String condition){
         if(condition == null || condition.equals("") || allSpaces(condition)){
+            this.condition = "";
             return;
         }
         
